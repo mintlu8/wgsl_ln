@@ -281,7 +281,7 @@ fn wgsl2(stream: TokenStream) -> TokenStream {
                 let location = span.location(&source);
                 let pos = match spans.binary_search_by_key(&(location.offset as usize), |x| x.0) {
                     Ok(x) => x,
-                    Err(x) => x,
+                    Err(x) => x.saturating_sub(1),
                 };
                 abort!(spans[pos].1, "Wgsl Error: {}", e)
             }
