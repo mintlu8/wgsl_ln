@@ -1,0 +1,23 @@
+[package]
+name = "wgsl_ln"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["Mincong Lu <mintlux667@gmail.com>"]
+license = "MIT OR Apache-2.0"
+
+readme = "README.md"
+repository = "https://github.com/mintlu8/wgsl_ln"
+description = """
+Experimental crate for writing wgsl in rust!
+"""
+keywords = ["wgsl", "shader"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+naga = { version = "0.20.0", features = ["wgsl-in"] }
+proc-macro-error = "1.0.4"
+proc-macro2 = "1.0.86"
+quote = "1.0.36"
