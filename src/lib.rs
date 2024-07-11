@@ -200,14 +200,28 @@ fn to_wgsl_string(
             }
             TokenTree::Punct(p) => {
                 spans.push((string.len(), p.span()));
-                string.push(p.as_char());
                 if p.as_char() == ';' {
+                    string.push(p.as_char());
                     string.push('\n');
                 } else if p.as_char() == '#' {
-                    // do nothing to support `naga_oil`
+                    // new line and no spaces for naga_oil
+                    string.push('\n');
+                    string.push(p.as_char());
+                    uses_naga_oil = true;
+                } else if p.as_char() == ':' {
+                    // bend over backwards for `naga_oil` :p
+                    match string.pop() {
+                        Some(' ') => (),
+                        Some(c) => string.push(c),
+                        None => (),
+                    }
+                    string.push(p.as_char());
                     uses_naga_oil = true;
                 } else if p.spacing() == Spacing::Alone {
+                    string.push(p.as_char());
                     string.push(' ');
+                } else {
+                    string.push(p.as_char());
                 }
             }
             TokenTree::Literal(l) => {
