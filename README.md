@@ -80,6 +80,23 @@ mod my_shaders {
 pub use my_shaders::MAGIC;
 ```
 
+## `naga_oil` support
+
+Enable the `naga_oil` feature to enable limited `naga_oil` support:
+
+* Treat `#preprocessor_macro_name` as tokens instead of imports.
+  * `#define_import_path`
+  * `#import`
+  * `#if`
+  * `#ifdef`
+  * `#ifndef`
+  * `#else`
+  * `#endif`
+
+These values can on longer be imported.
+
+* Checks will be disabled when naga_oil preprocessor macros are detected.
+
 ## License
 
 License under either of

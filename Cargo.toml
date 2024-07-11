@@ -1,6 +1,6 @@
 [package]
 name = "wgsl_ln"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 authors = ["Mincong Lu <mintlux667@gmail.com>"]
@@ -12,6 +12,9 @@ description = """
 Experimental crate for writing wgsl in rust!
 """
 keywords = ["wgsl", "shader"]
+
+[features]
+naga_oil = []
 
 [lib]
 proc-macro = true

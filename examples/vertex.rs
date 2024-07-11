@@ -1,6 +1,5 @@
 use wgsl_ln::{wgsl, wgsl_export};
 
-
 #[wgsl_export(Vertex)]
 pub static VERTEX: &str = wgsl!(
     struct Vertex {
@@ -30,7 +29,6 @@ pub static VERTEX_OUT: &str = wgsl!(
         @location(6) @interpolate(flat) instance_index: u32
     }
 );
-
 
 pub static VERTEX_SHADER: &str = wgsl!(
     @vertex

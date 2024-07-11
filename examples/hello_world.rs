@@ -1,4 +1,4 @@
-use another_world::{WORLD_2, HELLO_2};
+use another_world::{HELLO_2, WORLD_2};
 use the_third_world::WORLD_3;
 use wgsl_ln::{wgsl, wgsl_export};
 
@@ -18,7 +18,6 @@ pub static WORLD: &str = wgsl!(
 mod another_world {
     use wgsl_ln::{wgsl, wgsl_export};
 
-
     #[wgsl_export(hello2)]
     pub static HELLO_2: &str = wgsl!(
         fn hello2(v: vec2<f32>) -> f32 {
@@ -32,7 +31,6 @@ mod another_world {
         }
     );
 }
-
 
 mod the_third_world {
     use wgsl_ln::wgsl;
