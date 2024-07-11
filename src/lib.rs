@@ -118,7 +118,7 @@
 //!     * `#else`
 //!     * `#endif`
 //!
-//! These values can on longer be imported.
+//! These values can no longer be imported.
 //!
 //! * Checks will be disabled when naga_oil preprocessor macros are detected.
 //!
