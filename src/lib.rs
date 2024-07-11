@@ -243,7 +243,7 @@ fn to_wgsl_string(
                 }
             }
         }
-        first = true;
+        first = false;
     }
     uses_naga_oil
 }
