@@ -7,8 +7,8 @@ Experimental crate for writing wgsl in rust!
 
 ## The `wgsl!` macro
 
-The `wgsl!` macro converts normal rust tokens into a wgsl `&'static str`, similar to [`stringify!`].
-This also validates the wgsl string using [`naga`]. Errors will be reported with
+The `wgsl!` macro converts normal rust tokens into a wgsl `&'static str`, similar to `stringify!`.
+This also validates the wgsl string using `naga`. Errors will be reported with
 the correct span.
 
 ```rust
@@ -62,7 +62,7 @@ or omit the `#` in later usages.
 
 `wgsl_export` creates a `macro_rules!` macro that pastes itself into the `wgsl!` macro.
 The macro is `#[doc(hidden)]` and available in the crate root,
-i.e. `crate::__paste_wgsl_manhattan_distance!`.
+i.e. `crate::__wgsl_paste_manhattan_distance!`.
 
 You don't need to import anything to use items defined in your crate, for other crates,
 you might want to blanket import the crate root.

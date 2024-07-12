@@ -85,7 +85,7 @@
 //!
 //! `wgsl_export` creates a `macro_rules!` macro that pastes itself into the `wgsl!` macro.
 //! The macro is `#[doc(hidden)]` and available in the crate root,
-//! i.e. `crate::__paste_wgsl_manhattan_distance!`.
+//! i.e. `crate::__wgsl_paste_manhattan_distance!`.
 //!
 //! You don't need to import anything to use items defined in your crate, for other crates,
 //! you might want to blanket import the crate root.
@@ -107,7 +107,7 @@
 //!
 //! # `naga_oil` support
 //!
-//! Enable the `naga_oil` feature to enable limited `naga_oil` support:
+//! Enable the `naga_oil` feature for limited `naga_oil` support:
 //!
 //! * Treat `#preprocessor_macro_name` as tokens instead of imports.
 //!     * `#define_import_path`
@@ -183,6 +183,13 @@ fn close(d: Delimiter) -> char {
     }
 }
 
+/// Convert to `wgsl` and return if we think this uses `naga_oil` or not.
+/// This has to format in a certain way to make `naga_oil` work:
+///
+/// * Linebreaks after `;` and `}`.
+/// * Linebreaks before `#`.
+/// * No space after `#`.
+/// * No spaces before and after `:`.
 fn to_wgsl_string(
     stream: TokenStream,
     spans: &mut Vec<(usize, Span)>,
@@ -248,6 +255,7 @@ fn to_wgsl_string(
     uses_naga_oil
 }
 
+/// Remove duplicated `#`s from `# ident`s.
 fn sanitize_remaining(stream: IntoIter, ident: &Ident, items: &mut Vec<TokenTree>) {
     let mut last_is_hash = false;
     for tt in stream {
@@ -304,6 +312,7 @@ fn sanitize(stream: TokenStream) -> (TokenStream, Option<Ident>) {
             TokenTree::Punct(p) if p.as_char() == '#' => {
                 last_is_hash = true;
             }
+            // if is a naga_oil definition, write `#def`
             #[cfg(feature = "naga_oil")]
             TokenTree::Ident(ident) if last_is_hash && is_naga_oil_name(&ident) => {
                 last_is_hash = false;
@@ -313,11 +322,13 @@ fn sanitize(stream: TokenStream) -> (TokenStream, Option<Ident>) {
                 )));
                 result.push(TokenTree::Ident(ident.clone()));
             }
+            // If # ident, import it and remove duplicated `#`s.
             TokenTree::Ident(ident) if last_is_hash => {
                 result.push(TokenTree::Ident(ident.clone()));
                 sanitize_remaining(iter, &ident, &mut result);
                 return (TokenStream::from_iter(result), Some(ident));
             }
+            // Recursively look for `#`s.
             TokenTree::Group(g) => {
                 let delim = g.delimiter();
                 let (stream, ident) = sanitize(g.stream());
@@ -444,17 +455,19 @@ fn __wgsl_paste2(stream: TokenStream) -> TokenStream {
     let Some(TokenTree::Ident(definition)) = iter.next() else {
         abort!(
             Span::call_site(),
-            "Expected `__wgsl_paste!($definition [$($defined)*] {to_be_pasted} $($tt)*)`!"
+            "Expected `__wgsl_paste!($definition {to_be_pasted} $([$($defined)*])? $($tt)*)`!"
         )
     };
     let Some(TokenTree::Group(pasted)) = iter.next() else {
         abort!(
             Span::call_site(),
-            "Expected `__wgsl_paste!($definition [$($defined)*] {to_be_pasted} $($tt)*)`!"
+            "Expected `__wgsl_paste!($definition {to_be_pasted} $([$($defined)*])? $($tt)*)`!"
         )
     };
     let pasted = pasted.stream();
     match iter.next() {
+        // If some values are defined, check if this item has been defined.
+        // If defined, skip, if not defined, paste and define this item.
         Some(TokenTree::Group(g)) if g.delimiter() == Delimiter::Bracket => {
             let tokens: TokenStream = iter.collect();
             let mut found = false;
@@ -477,6 +490,7 @@ fn __wgsl_paste2(stream: TokenStream) -> TokenStream {
                 quote!(::wgsl_ln::wgsl!([#(#names)* #definition] #pasted #tokens))
             }
         }
+        // If no values defined, paste and define this item.
         other => {
             let tokens: TokenStream = iter.collect();
             quote! {
