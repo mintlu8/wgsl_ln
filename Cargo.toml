@@ -17,6 +17,12 @@ keywords = ["wgsl", "shader"]
 ## Enable support for the `naga_oil` crate.
 naga_oil = []
 
+[profile.dev.package.naga]
+debug-assertions=true
+
+[profile.release.package.naga]
+debug-assertions=true
+
 [lib]
 proc-macro = true
 
