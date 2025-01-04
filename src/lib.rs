@@ -124,7 +124,8 @@
 //!
 
 use proc_macro::TokenStream as TokenStream1;
-use proc_macro_error::proc_macro_error;
+use proc_macro_error::{proc_macro_error, set_dummy};
+use quote::quote;
 mod __wgsl_paste2;
 mod open_close;
 mod sanitize;
@@ -164,6 +165,7 @@ mod wgsl_export2;
 #[proc_macro]
 #[proc_macro_error]
 pub fn wgsl(stream: TokenStream1) -> TokenStream1 {
+    set_dummy(quote! {""});
     wgsl2::wgsl2(stream.into()).into()
 }
 
@@ -183,6 +185,8 @@ pub fn wgsl(stream: TokenStream1) -> TokenStream1 {
 #[proc_macro_attribute]
 #[proc_macro_error]
 pub fn wgsl_export(attr: TokenStream1, stream: TokenStream1) -> TokenStream1 {
+    set_dummy(quote! {""});
+
     wgsl_export2::wgsl_export2(attr.into(), stream.into()).into()
 }
 
@@ -191,5 +195,7 @@ pub fn wgsl_export(attr: TokenStream1, stream: TokenStream1) -> TokenStream1 {
 #[proc_macro]
 #[proc_macro_error]
 pub fn __wgsl_paste(stream: TokenStream1) -> TokenStream1 {
+    set_dummy(quote! {""});
+
     __wgsl_paste2::__wgsl_paste2(stream.into()).into()
 }
