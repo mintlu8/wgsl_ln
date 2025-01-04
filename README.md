@@ -1,4 +1,4 @@
-#FORK OF wgsl_ln, for adding my personal improvements
+# FORK OF wgsl_ln, for adding my personal improvements
 
 [![Crates.io](https://img.shields.io/crates/v/wgsl_ln.svg)](https://crates.io/crates/wgsl_ln)
 [![Docs](https://docs.rs/wgsl_ln/badge.svg)](https://docs.rs/wgsl_ln/latest/wgsl_ln/)
