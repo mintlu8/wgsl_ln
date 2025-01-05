@@ -1,4 +1,7 @@
-use proc_macro2::{token_stream::IntoIter, Delimiter, Group, Ident, TokenStream, TokenTree};
+#[allow(unused)]
+use proc_macro2::{
+    token_stream::IntoIter, Delimiter, Group, Ident, Spacing, TokenStream, TokenTree,
+};
 /// Find the first instance of `#ident` and rewrite the macro as `__paste!(wgsl!())`.
 pub fn sanitize(stream: TokenStream) -> (TokenStream, Option<Ident>) {
     let mut result = Vec::new();
