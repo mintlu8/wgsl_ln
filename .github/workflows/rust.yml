@@ -38,7 +38,7 @@ jobs:
         run: cargo test
       - name: Run cargo clean
         run: cargo clean
-      - name: Run cargo test
+      - name: Run cargo test with feature naga_oil 
         run: cargo test --features naga_oil
 
   # Run cargo clippy -- -D warnings
