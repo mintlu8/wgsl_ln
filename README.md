@@ -85,6 +85,7 @@ pub use my_shaders::MAGIC;
 If a `#` is detected, we will disable certain validations.
 
 * Checks will be disabled when naga_oil preprocessor macros are detected.
+* All `#` starting statements has to end with either `;` or `}` to force a line break.
 
 ## License
 

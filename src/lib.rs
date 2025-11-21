@@ -107,7 +107,8 @@
 //!
 //! # `naga_oil` support
 //!
-//! If a `#` is detected, we will disable certain validations.
+//! * If a `#` is detected, we will disable certain validations.
+//! * All `#` starting statements has to end with either `;` or `}` to force a line break.
 //!
 
 use proc_macro::TokenStream as TokenStream1;

@@ -12,6 +12,7 @@ pub static VERTEX_OUT: &str = wgsl!(
 );
 
 pub static VERTEX_SHADER: &str = wgsl!(
+    @group(#{MATERIAL_BIND_GROUP}) @binding(0) var<uniform> ratio: f32;
     @vertex
     fn vertex_shader(vertex: $Vertex) -> $VertexOutput {
         var out: $VertexOutput;
