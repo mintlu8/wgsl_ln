@@ -49,7 +49,7 @@ pub static MANHATTAN_DISTANCE: &str = wgsl!(
 ```rust
 pub static MANHATTAN_DISTANCE_TIMES_FIVE: &str = wgsl!(
     fn manhattan_distance_times_five(a: vec2<f32>, b: vec2<f32>) -> f32 {
-        return #manhattan_distance(a, b) * 5.0;
+        return $manhattan_distance(a, b) * 5.0;
     }
 );
 ```
@@ -82,18 +82,7 @@ pub use my_shaders::MAGIC;
 
 ## `naga_oil` support
 
-Enable the `naga_oil` feature to enable limited `naga_oil` support:
-
-* Treat `#preprocessor_macro_name` as tokens instead of imports.
-  * `#define_import_path`
-  * `#import`
-  * `#if`
-  * `#ifdef`
-  * `#ifndef`
-  * `#else`
-  * `#endif`
-
-These values can no longer be imported.
+If a `#` is detected, we will disable certain validations.
 
 * Checks will be disabled when naga_oil preprocessor macros are detected.
 

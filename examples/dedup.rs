@@ -10,19 +10,19 @@ pub static SIN_COS: &str = wgsl!(
 #[wgsl_export(sin_cos2)]
 pub static SIN_COS_SQUARED: &str = wgsl!(
     fn sin_cos2(v: f32) -> vec2<f32> {
-        return #sin_cos(v) * #sin_cos(v);
+        return $sin_cos(v) * $sin_cos(v);
     }
 );
 
 pub static SIN_COS_SQUARED_PLUS_SIN_COS_1: &str = wgsl!(
     fn a(v: f32) -> vec2<f32> {
-        return #sin_cos2(v) * #sin_cos(v);
+        return $sin_cos2(v) * $sin_cos(v);
     }
 );
 
 pub static SIN_COS_SQUARED_PLUS_SIN_COS_2: &str = wgsl!(
     fn a(v: f32) -> vec2<f32> {
-        return #sin_cos(v) * #sin_cos2(v);
+        return $sin_cos(v) * $sin_cos2(v);
     }
 );
 

@@ -2,7 +2,7 @@ use proc_macro2::{Span, TokenStream, TokenTree};
 use proc_macro_error::abort;
 use quote::{format_ident, quote};
 
-pub fn wgsl_export2(attr: TokenStream, stream: TokenStream) -> TokenStream {
+pub fn wgsl_export_macro(attr: TokenStream, stream: TokenStream) -> TokenStream {
     let Some(TokenTree::Ident(name)) = attr.into_iter().next() else {
         abort!(Span::call_site(), "Expected #[wgsl_export(name)]");
     };

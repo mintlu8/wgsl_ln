@@ -1,6 +1,6 @@
 [package]
 name = "wgsl_ln"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 
 authors = ["Mincong Lu <mintlux667@gmail.com>"]
@@ -14,8 +14,6 @@ Experimental crate for writing wgsl in rust!
 keywords = ["wgsl", "shader"]
 
 [features]
-## Enable support for the `naga_oil` crate.
-naga_oil = []
 
 [profile.dev.package.naga]
 debug-assertions=true
@@ -27,7 +25,7 @@ debug-assertions=true
 proc-macro = true
 
 [dependencies]
-naga = { version = "0.20.0", features = ["wgsl-in"] }
+naga = { version = "25", features = ["wgsl-in"] }
 proc-macro-error = "1.0.4"
 proc-macro2 = "1.0.86"
 quote = "1.0.36"

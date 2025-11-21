@@ -5,7 +5,7 @@ use quote::{format_ident, quote};
 
 use crate::{sanitize::sanitize, to_wgsl_string::to_wgsl_string};
 
-pub fn wgsl2(stream: TokenStream) -> TokenStream {
+pub fn wgsl_macro(stream: TokenStream) -> TokenStream {
     let (stream, pastes) = sanitize(stream);
     if let Some(paste) = pastes {
         let paste = format_ident!("__wgsl_paste_{}", paste);
@@ -15,7 +15,6 @@ pub fn wgsl2(stream: TokenStream) -> TokenStream {
     let mut source = String::new();
     #[allow(unused_variables)]
     let uses_naga_oil = to_wgsl_string(stream, &mut spans, &mut source);
-    #[cfg(feature = "naga_oil")]
     if uses_naga_oil {
         return quote! {#source};
     }

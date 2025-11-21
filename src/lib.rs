@@ -42,7 +42,7 @@
 //! );
 //! ```
 //!
-//! # Using an exported item
+//! # Using an exported item with `$item`
 //!
 //! ```
 //! # use wgsl_ln::{wgsl, wgsl_export};
@@ -54,7 +54,7 @@
 //! # );
 //! pub static MANHATTAN_DISTANCE_TIMES_FIVE: &str = wgsl!(
 //!     fn manhattan_distance_times_five(a: vec2<f32>, b: vec2<f32>) -> f32 {
-//!         return #manhattan_distance(a, b) * 5.0;
+//!         return $manhattan_distance(a, b) * 5.0;
 //!     }
 //! );
 //! ```
@@ -75,8 +75,8 @@
 //! # );
 //! pub static MANHATTAN_DISTANCE_TIMES_FIVE: &str = wgsl!(
 //!     fn manhattan_distance_times_five(a: vec2<f32>, b: vec2<f32>) -> f32 {
-//!         // missing comma
-//!         return #manhattan_distance(a, b) * 5.0
+//!         // missing semicolon
+//!         return $manhattan_distance(a, b) * 5.0
 //!     }
 //! );
 //! ```
@@ -97,7 +97,7 @@
 //!
 //!     pub static MAGIC: &str = wgsl!(
 //!         fn magic() -> f32 {
-//!             return #magic_number();
+//!             return $magic_number();
 //!         }
 //!     )
 //! }
@@ -107,31 +107,18 @@
 //!
 //! # `naga_oil` support
 //!
-//! Enable the `naga_oil` feature for limited `naga_oil` support:
-//!
-//! * Treat `#preprocessor_macro_name` as tokens instead of imports.
-//!     * `#define_import_path`
-//!     * `#import`
-//!     * `#if`
-//!     * `#ifdef`
-//!     * `#ifndef`
-//!     * `#else`
-//!     * `#endif`
-//!
-//! These values can no longer be imported.
-//!
-//! * Checks will be disabled when naga_oil preprocessor macros are detected.
+//! If a `#` is detected, we will disable certain validations.
 //!
 
 use proc_macro::TokenStream as TokenStream1;
 use proc_macro_error::{proc_macro_error, set_dummy};
 use quote::quote;
-mod __wgsl_paste2;
+mod pasting;
 mod open_close;
 mod sanitize;
 mod to_wgsl_string;
-mod wgsl2;
-mod wgsl_export2;
+mod wgsl_macro;
+mod wgsl_export_macro;
 
 /// Converts normal rust tokens into a wgsl `&'static str`, similar to [`stringify!`].
 /// This also validates the wgsl string using [`naga`]. Errors will be reported with
@@ -146,7 +133,7 @@ mod wgsl_export2;
 /// );
 /// ```
 ///
-/// To import an exported item, use the `#name` syntax. See crate level documentation for details.
+/// To import an exported item, use the `$name` syntax. See crate level documentation for details.
 ///
 /// ```
 /// # use wgsl_ln::{wgsl, wgsl_export};
@@ -158,7 +145,8 @@ mod wgsl_export2;
 /// # );
 /// pub static MANHATTAN_DISTANCE_SQUARED: &str = wgsl!(
 ///     fn manhattan_distance_squared(a: vec2<f32>, b: vec2<f32>) -> f32 {
-///         return #manhattan_distance(a, b) * manhattan_distance(a, b);
+///         // Using one `$` on the first item is also fine, we will deduplicate items.
+///         return $manhattan_distance(a, b) * $manhattan_distance(a, b);
 ///     }
 /// );
 /// ```
@@ -166,7 +154,7 @@ mod wgsl_export2;
 #[proc_macro_error]
 pub fn wgsl(stream: TokenStream1) -> TokenStream1 {
     set_dummy(quote! {""});
-    wgsl2::wgsl2(stream.into()).into()
+    wgsl_macro::wgsl_macro(stream.into()).into()
 }
 
 /// Export a wgsl item (function, struct, etc).
@@ -187,7 +175,7 @@ pub fn wgsl(stream: TokenStream1) -> TokenStream1 {
 pub fn wgsl_export(attr: TokenStream1, stream: TokenStream1) -> TokenStream1 {
     set_dummy(quote! {""});
 
-    wgsl_export2::wgsl_export2(attr.into(), stream.into()).into()
+    wgsl_export_macro::wgsl_export_macro(attr.into(), stream.into()).into()
 }
 
 /// Paste and avoid duplicates.
@@ -197,5 +185,5 @@ pub fn wgsl_export(attr: TokenStream1, stream: TokenStream1) -> TokenStream1 {
 pub fn __wgsl_paste(stream: TokenStream1) -> TokenStream1 {
     set_dummy(quote! {""});
 
-    __wgsl_paste2::__wgsl_paste2(stream.into()).into()
+    pasting::wgsl_paste(stream.into()).into()
 }

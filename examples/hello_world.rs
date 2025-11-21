@@ -11,7 +11,7 @@ pub static HELLO: &str = wgsl!(
 
 pub static WORLD: &str = wgsl!(
     fn world(v: vec4<f32>) -> f32 {
-        return #hello(v.xy) + #hello(v.zw);
+        return $hello(v.xy) + $hello(v.zw);
     }
 );
 
@@ -21,13 +21,13 @@ mod another_world {
     #[wgsl_export(hello2)]
     pub static HELLO_2: &str = wgsl!(
         fn hello2(v: vec2<f32>) -> f32 {
-            return #hello(v);
+            return $hello(v);
         }
     );
 
     pub static WORLD_2: &str = wgsl!(
         fn world(v: vec4<f32>) -> f32 {
-            return #hello(v.xy) + #hello(v.zw);
+            return $hello(v.xy) + $hello(v.zw);
         }
     );
 }
@@ -37,7 +37,7 @@ mod the_third_world {
 
     pub static WORLD_3: &str = wgsl!(
         fn world(v: vec4<f32>) -> f32 {
-            return #hello2(v.xy) + #hello(v.zw);
+            return $hello2(v.xy) + $hello(v.zw);
         }
     );
 }

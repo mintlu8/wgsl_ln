@@ -34,14 +34,13 @@ pub fn to_wgsl_string(
                     string.push(p.as_char());
                     uses_naga_oil = true;
                 } else if p.as_char() == ':' {
-                    // bend over backwards for `naga_oil` :p
+                    // bend over backwards for `naga_oil`
                     match string.pop() {
                         Some(' ') => (),
                         Some(c) => string.push(c),
                         None => (),
                     }
                     string.push(p.as_char());
-                    uses_naga_oil = true;
                 } else if p.spacing() == Spacing::Alone {
                     string.push(p.as_char());
                     string.push(' ');

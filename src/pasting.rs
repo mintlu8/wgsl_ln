@@ -1,18 +1,19 @@
 use proc_macro2::{Delimiter, Span, TokenStream, TokenTree};
 use proc_macro_error::abort;
 use quote::quote;
-pub fn __wgsl_paste2(stream: TokenStream) -> TokenStream {
+
+pub fn wgsl_paste(stream: TokenStream) -> TokenStream {
     let mut iter = stream.into_iter();
     let Some(TokenTree::Ident(definition)) = iter.next() else {
         abort!(
             Span::call_site(),
-            "Expected `__wgsl_paste!($definition {to_be_pasted} $([$($defined)*])? $($tt)*)`!"
+            "Expected `__wgsl_paste!($definition {to_be_pasted} [$($defined)*] $($tt)*)`!"
         )
     };
     let Some(TokenTree::Group(pasted)) = iter.next() else {
         abort!(
             Span::call_site(),
-            "Expected `__wgsl_paste!($definition {to_be_pasted} $([$($defined)*])? $($tt)*)`!"
+            "Expected `__wgsl_paste!($definition {to_be_pasted} [$($defined)*] $($tt)*)`!"
         )
     };
     let pasted = pasted.stream();
